@@ -3,7 +3,7 @@
 
 Description
 -----------
-My implementation of 2048 in Java. Made over a couple of nights because I was missing Java.
+My implementation of 2048 in Java. Made over a couple of nights because I was missing Java. Released under the GNU Public Licence.
 
 Inspiration
 -----------
