@@ -1,14 +1,18 @@
 import java.io.*;
 import java.util.*;
+
 class Game{
+
 	BufferedReader br;
 	int board[][];
 	int score;
+
 	Game(){
 		init();
 	}
+	
 	int[] getRandomPoint(){
-		
+		/* Returns the 1-based co-ordinates of a random empty cell */
 		ArrayList<int[]> a = new ArrayList<int[]>();
 		for(int i = 1; i <= 4; i++){
 			for(int j = 1; j <= 4; j++){
@@ -19,14 +23,17 @@ class Game{
 		int r = (int)(Math.random()*a.size());
 		return (r < a.size())?a.get(r):null;
 	}
+	
 	int get2or4(){
+		/* Returns 2 95% of the time, 4 the other 5%. */
 		int x = (int)(Math.random()*100);
 		if(x < 95)
 			return 2;
 		return 4;
-		
 	}
+	
 	void init(){
+		/* Initializes the board. */
 		br = new BufferedReader(new InputStreamReader(System.in));
 		board = new int[4][4];
 		int a = get2or4();
@@ -39,24 +46,9 @@ class Game{
 		
 		score = 0;
 	}
-	int process(int x1, int y1, int x2, int y2){
-		//x1, y1 = dest; x2,y2 = source
-		if(board[x2-1][y2-1] == 0)
-			return 0;
-		if(board[x1-1][y1-1] == 0){
-			board[x1-1][y1-1] = board[x2-1][y2-1];
-			board[x2-1][y2-1] = 0;
-			return 0;
-		}
-		if(board[x1-1][y1-1] == board[x2-1][y2-1]){
-			board[x1-1][y1-1] = 2*board[x1-1][y1-1];
-			board[x2-1][y2-1] = 0;
-			return board[x1-1][y1-1];
-		}
-		return 0;
-	}
 	
 	boolean movePossible(){
+		/* Returns true if a move is possible on the board. */
 		for(int i = 1; i <= 4; i++){
 			for(int j = 1; j <= 4; j++){
 				if(board[i-1][j-1] == 0)
@@ -81,13 +73,17 @@ class Game{
 		}
 		return false;
 	}
+
 	boolean diff(int a[], int b[]){
+		/* Returns true if a and b have different elements at any corresponding index. */
 		for(int i = 0; i < 4; i++)
 			if(a[i] != b[i])
 				return true;
 		return false;
 	}
+	
 	ArrayList<Object> move(int arr[]){
+		/* Moves arr to the left. Returns the array after processing, the increase in score and a boolean value denoting whether there has been any change at all. This function is used for all directions by generating the relevant arrays. */
 		int s = 0;
 		int b[] = arr.clone();
 		ArrayList<Object> a = new ArrayList<Object>();
@@ -113,39 +109,30 @@ class Game{
 				s += arr[c-1];
 				ch[c-1] = true;
 				arr[c] = 0;
+				c--;
 			}
 		}
 		a.add(arr);
 		a.add(s);
 		a.add(diff(arr, b));
-		//System.out.println("Changed:");
-		//printarr(b);
-		//System.out.println("To:");
-		//printarr(arr);
-		//System.out.println("Res: "+(Boolean)a.get(2));
 		return a;
 	}
 
-	void printarr(int arr[]){
-		System.out.print("[");
-		for(int i = 0; i < arr.length; i++){
-			System.out.print(arr[i]);
-			if(i < arr.length-1)
-				System.out.print(", ");
-		}
-		System.out.println("]");
-	}
-	
 	int[] reverse(int arr[]){
+		/* Returns the array with the order of elements reversed. */
 		int x[] = new int[arr.length];
 		for(int i = 0; i < arr.length; i++)
 			x[arr.length-1-i] = arr[i];
 		return x;
 	}
+	
 	int[] getRow(int r){
+		/* Returns the r-th row. */
 		return board[r];
 	}
+	
 	int[] getColumn(int c){
+		/* Returns the c-th column. */
 		int a[] = new int[4];
 		a[0] = board[0][c];
 		a[1] = board[1][c];
@@ -153,28 +140,50 @@ class Game{
 		a[3] = board[3][c];
 		return a;
 	}
+	
 	void setRow(int r, int c[]){
+		/* Copies c to the r-th row. */
 		board[r][0] = c[0];
 		board[r][1] = c[1];
 		board[r][2] = c[2];
 		board[r][3] = c[3];
-		
 	}
+	
 	void setColumn(int c, int r[]){
+		/* Copies r to the c-th column. */
 		board[0][c] = r[0];
 		board[1][c] = r[1];
 		board[2][c] = r[2];
 		board[3][c] = r[3];
-		
 	}
-	boolean moveLeft(){
+	
+	boolean hvMove(char dir){
+		/* Make a shift in the given direction. */
 		int s = 0;
 		boolean ch = false;
 		for(int i = 0; i < 4; i++){
-			//s += moveRowLeft(i);
-			ArrayList<Object> a = move(getRow(i));
-			int[] arr = (int[])a.get(0);
-			setRow(i, arr);
+			ArrayList<Object> a = null;
+			int[] arr = null;
+			if(dir == 'L'){
+				a = move(getRow(i));
+				arr = (int[])a.get(0);
+			}
+			else if(dir == 'R'){
+				a = move(reverse(getRow(i)));
+				arr = reverse((int[])a.get(0));
+			}
+			else if(dir == 'U'){
+				a = move(getColumn(i));
+				arr = (int[])a.get(0);
+			}
+			else if(dir == 'D'){
+				a = move(reverse(getColumn(i)));
+				arr = reverse((int[])a.get(0));
+			}
+			if(dir == 'L' || dir == 'R')
+				setRow(i, arr);
+			else if(dir == 'U' || dir == 'D')
+				setColumn(i, arr);
 			s += (Integer)a.get(1);
 			ch = ch || (Boolean)a.get(2);
 		}
@@ -182,47 +191,8 @@ class Game{
 		return ch;
 	}
 
-	boolean moveRight(){
-		int s = 0;
-		boolean ch = false;
-		for(int i = 0; i < 4; i++){
-			ArrayList<Object> a = move(reverse(getRow(i)));
-			int[] arr = reverse((int[])a.get(0));
-			setRow(i, arr);
-			s += (Integer)a.get(1);
-			ch = ch || (Boolean)a.get(2);
-			//s += moveRowRight(i);
-		}
-		score += s;
-		return ch;
-	}
-	boolean moveUp(){
-		int s = 0;
-		boolean ch = false;
-		for(int i = 0; i < 4; i++){
-			ArrayList<Object> a = move(getColumn(i));
-			int[] arr = (int[])a.get(0);
-			setColumn(i, arr);
-			s += (Integer)a.get(1);
-			ch = ch || (Boolean)a.get(2);
-		}
-		score += s;
-		return ch;
-	}
-	boolean moveDown(){
-		int s = 0;
-		boolean ch = false;
-		for(int i = 0; i < 4; i++){
-			ArrayList<Object> a = move(reverse(getColumn(i)));
-			int[] arr = reverse((int[])a.get(0));
-			setColumn(i, arr);
-			s += (Integer)a.get(1);
-			ch = ch || (Boolean)a.get(2);
-		}
-		score += s;
-		return ch;
-	}
 	void disp(){
+		/* Displays the board. */
 		for(int i = 1; i <= 4; i++){
 			for(int j = 1; j <= 4; j++){
 				System.out.print(board[i-1][j-1] + "\t");
@@ -233,27 +203,16 @@ class Game{
 	}
 	
 	void makeMove(char ch){
-		boolean c = false;
-		switch(ch){
-			case 'R':
-				c = c || moveRight();
-				break;
-			case 'L':
-				c = c || moveLeft();
-				break;
-			case 'U':
-				c = c || moveUp();
-				break;
-			case 'D':
-				c = c || moveDown();
-				break;
-			default:
-				System.out.println("Invalid move!");
+		/* Caller fir hvMove. Also adds new cell if required. */
+		if(ch == 'x'){
+			init();
 		}
-		if(c)
+		else if((ch == 'L' || ch == 'R' || ch == 'U' || ch == 'D') && hvMove(ch))
 			addNew();
 	}
+	
 	char readMove(){
+		/* Reads user input. If a string is entered, only the first chatacter is processed. */
 		String inp = "";
 		char ch = '\0';
 		boolean firstmove = true;
@@ -262,13 +221,8 @@ class Game{
 				System.out.println("Invalid move! Try again.");
 			else firstmove = false;
 			try{
-				
-				//ch = (char)br.read();
-				//br.read();
 				inp = br.readLine();
 				ch = inp.charAt(0);
-				//System.out.println("You entered: '"+ch+"'");
-				return ch;
 			}
 			catch(Exception e){
 				System.out.println("I/O Error! Game terminating...");
@@ -278,19 +232,25 @@ class Game{
 				ch -= 32;
 		}
 		while(ch != 'R' && ch != 'L' && ch != 'U' && ch != 'D');
-		return 0;
+		return ch;
 	}
+	
 	void addNew(){
+		/* Add a new cell. */
 		int ind[] = getRandomPoint();
 		if(ind == null)
 			return;
 		int a = get2or4();
 		board[ind[0]-1][ind[1]-1] = a;
 	}
+	
 	void showScore(){
+		/* Display the player's score. */
 		System.out.println("Your score is: " + score);
 	}
+	
 	boolean checkWin(){
+		/* See if the player has won. */
 		for(int i = 0; i < 4; i++){
 			for(int j = 0; j < 4; j++){
 				if(board[i][j] == 2048)
@@ -299,16 +259,23 @@ class Game{
 		}
 		return false;
 	}
+	
 	void displayWin(){
+		/* Display a congratulatory message for the player. */
 		System.out.println("You won! :D");
 	}
+	
 	void displayLoss(){
+		/* Display sad smiley for player. */
 		System.out.println("You lost! :(");
 	}
 }
+
 public class G2048{
+	/*
+		Driver class for the Game.
+	*/
 	public static void main(String args[]) throws Exception{
-		//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		Game g = new Game();
 		g.init();
 		g.disp();
@@ -325,7 +292,6 @@ public class G2048{
 		if(!g.checkWin()){
 			g.displayLoss();
 		}
-		
 	}
 }
 
