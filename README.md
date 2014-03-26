@@ -13,6 +13,7 @@ http://gabrielecirulli.github.io/2048/
 Usage
 -----
 javac G2048.java
+
 java G2048
 
 Contact
