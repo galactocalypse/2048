@@ -3,7 +3,7 @@
 
 Description
 -----------
-My implementation of 2048 in Java.
+My implementation of 2048 in Java. Made over a couple of nights because I was missing Java.
 
 Inspiration
 -----------
