@@ -4,7 +4,7 @@
 Description
 -----------
 My implementation of 2048 in Java. Made over a couple of nights because I was missing Java. Released under the GNU Public Licence.
-![2048](snap.png 2048 - Sample Run)
+![2048](snap.png "2048 - Sample Run")
 
 Inspiration
 -----------
