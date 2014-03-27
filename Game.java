@@ -185,8 +185,10 @@ class Game{
 		return ch;
 	}
 
-	public void disp(){
-		/* Displays the board. */
+	public void dispVals(){
+		/*
+			Displays the board values.
+		*/
 		for(int i = 1; i <= 4; i++){
 			for(int j = 1; j <= 4; j++){
 				System.out.print(board[i-1][j-1] + "\t");
@@ -194,6 +196,22 @@ class Game{
 			System.out.println();
 		}
 		System.out.println();
+	}
+
+	public void disp(){
+		/*
+			Displays the board.
+		*/
+		for(int i = 0; i < 5; i++){
+			String s1 = ".";
+			String s2 = (i < 4)?"|":"";
+			for(int j = 0; j < 4; j++){
+				s1 += "____.";
+				if(i < 4)
+					s2 += gh.pad(board[i][j])+"|";
+			}
+			System.out.println(s1+"\n"+s2);
+		}
 	}
 	
 	public void performAction(){
@@ -203,7 +221,7 @@ class Game{
 			init();
 		}
 		else if(ch == 'Z'){
-			System.out.println("Exiting...");
+			System.out.println("Exiting...\nThanks for playing!\n");
 			System.exit(0);
 		}
 		else if((ch == 'L' || ch == 'R' || ch == 'U' || ch == 'D') && makeMove(ch))

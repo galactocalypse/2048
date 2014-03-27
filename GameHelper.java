@@ -82,6 +82,18 @@ class GameHelper{
 		System.out.println("Welcome to 2048!\n================");
 	}
 	
+	public String pad(int x){
+		int l = (""+x).length();
+		if(x == 0 || l == 0)
+			return "    ";
+		if(l == 1)
+			return "  "+x+" ";
+		if(l == 2)
+			return " "+x+" ";
+		if(l == 3)
+			return " "+x;
+		return "XXXX";
+	}
 }
 
 
