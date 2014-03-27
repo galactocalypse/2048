@@ -4,6 +4,7 @@
 Description
 -----------
 My implementation of 2048 in Java. Made over a couple of nights because I was missing Java. Released under the GNU Public Licence.
+![2048](snap.png 2048 - Sample Run)
 
 Inspiration
 -----------
@@ -12,10 +13,10 @@ http://gabrielecirulli.github.io/2048/
 
 Usage
 -----
-javac G2048.java
+javac G2048.java  
+java G2048  
 
-java G2048
-
+Use L, R, D and U for the respective shifts.
 
 Structure
 ---------
