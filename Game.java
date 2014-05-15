@@ -109,7 +109,6 @@ class Game{
 				arr[c] = 0;
 				s += arr[c-1];
 				ch[c-1] = true;
-				arr[c] = 0;
 				c--;
 			}
 		}
