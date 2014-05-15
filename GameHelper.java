@@ -92,6 +92,8 @@ class GameHelper{
 			return " "+x+" ";
 		if(l == 3)
 			return " "+x;
+		if(l == 4)
+			return ""+x;
 		return "XXXX";
 	}
 }
